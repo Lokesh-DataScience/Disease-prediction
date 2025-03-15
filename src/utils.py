@@ -7,3 +7,4 @@ def save_model(model, filename):
 def load_model(filename):
     with open(filename, 'rb') as file:
         return pickle.load(file)
+

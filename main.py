@@ -5,6 +5,8 @@ from src.disease_prediction import predict_disease
 from src.utils import save_model, load_model
 import os
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 # Load and clean the dataset
 data, encoder = load_and_clean_data("dataset/Training.csv")
@@ -27,6 +29,7 @@ for model_file in ["svm_model.pkl", "nb_model.pkl", "rf_model.pkl"]:
 save_model(svm_model, "models/svm_model.pkl")
 save_model(nb_model, "models/nb_model.pkl")
 save_model(rf_model, "models/rf_model.pkl")
+save_model(encoder, "models/encoder.pkl")
 
 # Evaluate models
 evaluate_model(svm_model, X, y, "SVM")
@@ -46,15 +49,18 @@ models = {
 }
 
 # Create a symptom-to-index mapping
-symptom_index = {col.strip().capitalize(): idx for idx, col in enumerate(X.columns)}
+symptom_index = {col.strip().replace("_", " ").capitalize(): idx for idx, col in enumerate(X.columns)}
 predictions_classes = dict(enumerate(encoder.classes_))
 
 # Ensure symptoms are properly formatted
-symptoms = "chills,shivering,continuous_sneezing,watering_from_eyes"
+symptoms = "Itching, Skin Rash, Nodal Skin Eruptions"
 symptoms = ",".join([s.strip().capitalize() for s in symptoms.split(",")])  # Normalize input
 
 # Make predictions
 prediction_results = predict_disease(symptoms, symptom_index, predictions_classes, models)
+
+# save symptom index 
+save_model(symptom_index, "models/symptom_index.pkl")
 
 # Output results
 print("\nPrediction Results:")
