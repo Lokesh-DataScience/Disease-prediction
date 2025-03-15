@@ -17,7 +17,7 @@ This project aims to predict diseases based on symptoms using machine learning m
 ### Clone the repository:
 
 ```bash
-git clone [https://github.com/Lokesh-DataScience/Disease-prediction.git](https://github.com/Lokesh-DataScience/Disease-prediction.git)
+git clone https://github.com/Lokesh-DataScience/Disease-prediction.git
 cd Disease_prediction
 ```
 
