@@ -7,8 +7,8 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include('predictor.urls')),
-    path('api/', include('predictor.urls')),
+    path("",include('disease_prediction.urls')),
+    path('api/', include('disease_prediction.urls')),
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
 ]
 if settings.DEBUG:

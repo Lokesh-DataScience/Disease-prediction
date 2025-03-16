@@ -1,5 +1,5 @@
 """
-ASGI config for disease_predictions project.
+ASGI config for healthcare project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'disease_predictions.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'healthcare.settings')
 
 application = get_asgi_application()

@@ -1,5 +1,5 @@
 """
-WSGI config for disease_predictions project.
+WSGI config for healthcare project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'disease_predictions.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'healthcare.settings')
 
 application = get_wsgi_application()

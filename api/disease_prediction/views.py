@@ -11,13 +11,13 @@ import os
 from django.shortcuts import render
 
 def home(request):
-    return render(request, 'predictor//index.html')
+    return render(request, 'disease_prediction//index.html')
 
 
 
 # Load models
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_DIR = os.path.join(BASE_DIR, 'predictor', 'models')
+MODEL_DIR = os.path.join(BASE_DIR, 'disease_prediction', 'models')
 
 svm_model = joblib.load(os.path.join(MODEL_DIR, 'svm_model.pkl'))
 nb_model = joblib.load(os.path.join(MODEL_DIR, 'nb_model.pkl'))
