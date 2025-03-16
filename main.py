@@ -1,15 +1,15 @@
-from src.data_preprocessing import load_and_clean_data
-from src.model_training import train_models
-from src.model_evaluation import evaluate_model
-from src.disease_prediction import predict_disease
-from src.utils import save_model, load_model
+from disease_prediction.src.data_preprocessing import load_and_clean_data
+from disease_prediction.src.model_training import train_models
+from disease_prediction.src.model_evaluation import evaluate_model
+from disease_prediction.src.disease_prediction import predict_disease
+from disease_prediction.src.utils import save_model, load_model
 import os
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
 # Load and clean the dataset
-data, encoder = load_and_clean_data("dataset/Training.csv")
+data, encoder = load_and_clean_data("disease_prediction/dataset/Training.csv")
 X = data.iloc[:, :-1]
 y = data.iloc[:, -1]
 
@@ -17,19 +17,19 @@ y = data.iloc[:, -1]
 svm_model, nb_model, rf_model = train_models(X, y)
 
 # Remove old models if they exist
-if not os.path.exists("models"):
-    os.makedirs("models")
+if not os.path.exists("disease_prediction/models"):
+    os.makedirs("disease_prediction/models")
 
 for model_file in ["svm_model.pkl", "nb_model.pkl", "rf_model.pkl"]:
-    model_path = os.path.join("models", model_file)
+    model_path = os.path.join("disease_prediction/models", model_file)
     if os.path.exists(model_path):
         os.remove(model_path)
 
 # Save models
-save_model(svm_model, "models/svm_model.pkl")
-save_model(nb_model, "models/nb_model.pkl")
-save_model(rf_model, "models/rf_model.pkl")
-save_model(encoder, "models/encoder.pkl")
+save_model(svm_model, "disease_prediction/models/svm_model.pkl")
+save_model(nb_model, "disease_prediction/models/nb_model.pkl")
+save_model(rf_model, "disease_prediction/models/rf_model.pkl")
+save_model(encoder, "disease_prediction/models/encoder.pkl")
 
 # Evaluate models
 evaluate_model(svm_model, X, y, "SVM")
@@ -37,9 +37,9 @@ evaluate_model(nb_model, X, y, "Naive Bayes")
 evaluate_model(rf_model, X, y, "Random Forest")
 
 # Load trained models
-svm_model = load_model("models/svm_model.pkl")
-nb_model = load_model("models/nb_model.pkl")
-rf_model = load_model("models/rf_model.pkl")
+svm_model = load_model("disease_prediction/models/svm_model.pkl")
+nb_model = load_model("disease_prediction/models/nb_model.pkl")
+rf_model = load_model("disease_prediction/models/rf_model.pkl")
 
 # Create model dictionary
 models = {
@@ -60,7 +60,7 @@ symptoms = ",".join([s.strip().capitalize() for s in symptoms.split(",")])  # No
 prediction_results = predict_disease(symptoms, symptom_index, predictions_classes, models)
 
 # save symptom index 
-save_model(symptom_index, "models/symptom_index.pkl")
+save_model(symptom_index, "disease_prediction/models/symptom_index.pkl")
 
 # Output results
 print("\nPrediction Results:")
