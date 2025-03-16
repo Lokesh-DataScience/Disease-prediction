@@ -1,3 +1,8 @@
+const API_BASE_URL =
+    window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+        ? "http://127.0.0.1:8000/api/predict/"
+        : "https://disease-detection-sipf.onrender.com/api/predict/";
+
 function predictDisease() {
     let symptoms = document.getElementById("symptoms").value.trim();
     if (symptoms === "") {
@@ -5,7 +10,7 @@ function predictDisease() {
         return;
     }
 
-    fetch("https://disease-detection-sipf.onrender.com/api/predict/", {
+    fetch(API_BASE_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
