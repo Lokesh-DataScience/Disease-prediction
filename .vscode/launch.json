@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Django Server",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/api/manage.py",          // Points to manage.py
+            "args": [
+                "runserver"                                     // Starts the Django server
+            ],
+            "env": {                                            // Set environment variables
+                "DJANGO_SETTINGS_MODULE": "healthcare.settings"  // Django settings module
+            },
+            "django": true,
+            "cwd": "${workspaceFolder}",                         // Project root
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Load Medicine Data",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/api/recommender/load_medicine_data.py",
+            "env": {
+                "DJANGO_SETTINGS_MODULE": "healthcare.settings"
+            },
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

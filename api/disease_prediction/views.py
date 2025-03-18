@@ -7,8 +7,22 @@ from collections import Counter
 import warnings
 warnings.filterwarnings('ignore')
 import os
+import json 
 
 from django.shortcuts import render
+
+def load_medicines():
+    medicine_file = os.path.join(os.path.dirname(__file__), 'data/medicines_data.json')
+    with open(medicine_file, 'r') as file:
+        medicines = json.load(file)
+    return medicines
+
+# Recommend medicines based on disease
+def recommend_medicine(disease, medicines):
+    recommendations = [
+        med for med in medicines if med["Disease Name"] == disease
+    ]
+    return recommendations
 
 def home(request):
     return render(request, 'disease_prediction//index.html')
@@ -27,23 +41,26 @@ encoder = joblib.load(os.path.join(MODEL_DIR, 'encoder.pkl'))
 symptom_index = joblib.load(os.path.join(MODEL_DIR, 'symptom_index.pkl'))
 
 # Helper function to predict disease
-
+def format_symptom(symptom):
+    return symptom.strip().title()
 # Helper function to predict disease
 def predict_disease(symptoms):
     print(f"Received symptoms: {symptoms}")  # Debugging
 
     symptoms = symptoms.split(",")
+    print(f"Split symptoms: {symptoms}")  # Debugging
     input_data = [0] * len(symptom_index)
 
     for symptom in symptoms:
-        index = symptom_index.get(symptom.strip())
+        formatted_symptom = format_symptom(symptom)
+        print(f"Formatted symptom: {formatted_symptom}")  # Debugging
+        index = symptom_index.get(formatted_symptom)
         if index is not None:
             input_data[index] = 1
         else:
-            print(f"Unknown symptom: {symptom}")  # Debugging
+            pass
 
     input_data = np.array(input_data).reshape(1, -1)
-    print(f"Encoded input: {input_data}")  # Debugging
 
     rf_prediction = encoder.inverse_transform([rf_model.predict(input_data)[0]])
     nb_prediction = encoder.inverse_transform([nb_model.predict(input_data)[0]])
@@ -75,4 +92,16 @@ def predict(request):
             return JsonResponse(predictions)
         else:
             return JsonResponse({"error": "No symptoms provided."}, status=400)
+        
+@csrf_exempt
+def get_medicines(request):
+    if request.method=="POST":
+        data = json.loads(request.body)
+        disease=data.get('disease')
+        if disease:
+            medicines = load_medicines()
+            recommend_medicines = recommend_medicine(disease,medicines)
+            return JsonResponse({'medicines': recommend_medicines})
+        else:
+            return JsonResponse({"Error" : "No disease provided"}, status=400)
 

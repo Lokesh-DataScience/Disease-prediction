@@ -30,3 +30,49 @@ function predictDisease() {
     })
     .catch(error => console.error("Error:", error));
 }
+
+// Fix the fetch URL
+function getMedicines() {
+    let disease = document.getElementById("result").querySelector("p span").innerText;
+    if (!disease) {
+        alert("Please get a disease prediction first!");
+        return;
+    }
+
+    // Use the correct endpoint URL
+    const MEDICINE_API_URL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+        ? "http://127.0.0.1:8000/api/medicines/"
+        : "https://disease-detection-sipf.onrender.com/api/medicines/";
+
+    fetch(MEDICINE_API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ disease: disease })
+    })
+    .then(response => response.json())
+    .then(data => {
+        let medicinesDiv = document.getElementById("medicines");
+        if (data.medicines && data.medicines.length > 0) {
+            let medicineHTML = `<h3>Recommended Medicines:</h3>`;
+            data.medicines.forEach(med => {
+                medicineHTML += `
+                    <div class="medicine">
+                        <h4>${med["Medicine Name"]}</h4>
+                        <p>Rating: ${med.Rating}</p>
+                        <p class="description">${med.Description.slice(0, 100)}... 
+                            <button class="more" onclick="showMore('${med.Description}')">More</button>
+                        </p>
+                        <a href="${med.URL}" target="_blank">More Info</a>
+                    </div>
+                    <hr>
+                `;
+            });
+            medicinesDiv.innerHTML = medicineHTML;
+        } else {
+            medicinesDiv.innerHTML = `<p>No medicines found for this disease.</p>`;
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
