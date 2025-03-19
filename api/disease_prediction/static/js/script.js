@@ -73,6 +73,12 @@ function predictDisease() {
         return;
     }
 
+    let symptomList = symptoms.split(',').map(s => s.trim());
+    if (symptomList.length < 3) {
+        alert("Please enter at least 3 symptoms!");
+        return;
+    }
+
     fetch(API_BASE_URL, {
         method: "POST",
         headers: {

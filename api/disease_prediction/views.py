@@ -46,15 +46,15 @@ def format_symptom(symptom):
     return symptom.strip().title()
 # Helper function to predict disease
 def predict_disease(symptoms):
-    print(f"Received symptoms: {symptoms}")  # Debugging
+    # print(f"Received symptoms: {symptoms}")  # Debugging
 
     symptoms = symptoms.split(",")
-    print(f"Split symptoms: {symptoms}")  # Debugging
+    # print(f"Split symptoms: {symptoms}")  # Debugging
     input_data = [0] * len(symptom_index)
 
     for symptom in symptoms:
         formatted_symptom = format_symptom(symptom)
-        print(f"Formatted symptom: {formatted_symptom}")  # Debugging
+        # print(f"Formatted symptom: {formatted_symptom}")  # Debugging
         index = symptom_index.get(formatted_symptom)
         if index is not None:
             input_data[index] = 1
@@ -67,7 +67,7 @@ def predict_disease(symptoms):
     nb_prediction = encoder.inverse_transform([nb_model.predict(input_data)[0]])
     svm_prediction = encoder.inverse_transform([svm_model.predict(input_data)[0]])
 
-    print(f"RF: {rf_prediction}, NB: {nb_prediction}, SVM: {svm_prediction}")  # Debugging
+    # print(f"RF: {rf_prediction}, NB: {nb_prediction}, SVM: {svm_prediction}")  # Debugging
 
     predictions = [rf_prediction[0], nb_prediction[0], svm_prediction[0]]
     final_prediction = Counter(predictions).most_common(1)[0][0]
