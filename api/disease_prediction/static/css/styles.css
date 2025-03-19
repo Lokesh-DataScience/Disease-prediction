@@ -159,3 +159,24 @@ button:hover {
 .medicine .more:focus {
     outline: none;
 }
+/* Add styles for the suggestions box */
+.suggestions-box {
+    position: absolute;
+    background: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 1000;
+}
+
+.suggestions-box div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestions-box div:hover {
+    background: #f0f0f0;
+}

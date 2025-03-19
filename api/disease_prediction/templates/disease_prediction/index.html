@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 {% load static %}
-<link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disease Detection</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
 
@@ -14,16 +14,17 @@
         <h1>Disease Detection</h1>
         <p>Enter your symptoms separated by commas:</p>
         <div class="input-box">
-            <input type="text" id="symptoms" placeholder="e.g., Itching, Skin Rash, Fever">
+            <input type="text" id="symptoms" placeholder="e.g., Itching, Skin Rash, Fever" oninput="showSuggestions(this.value)">
+            <div id="suggestions" class="suggestions-box"></div>
         </div>
         <button onclick="predictDisease()">Predict</button>
-
         <button onclick="getMedicines()">Get Medicine Recommendations</button>
-        
+        <button id="backButton" onclick="goBack()" style="display: none;">Back</button> <!-- Back button -->
+
         <div id="result" class="result-box"></div>
         <div id="medicines" class="medicine-container"></div>  <!-- Placeholder for medicine recommendations -->
     </div>
 
-    <script src="/static/js/script.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

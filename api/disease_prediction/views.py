@@ -39,6 +39,7 @@ rf_model = joblib.load(os.path.join(MODEL_DIR, 'rf_model.pkl'))
 
 encoder = joblib.load(os.path.join(MODEL_DIR, 'encoder.pkl'))
 symptom_index = joblib.load(os.path.join(MODEL_DIR, 'symptom_index.pkl'))
+print(symptom_index)
 
 # Helper function to predict disease
 def format_symptom(symptom):
