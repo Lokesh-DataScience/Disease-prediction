@@ -1,6 +1,6 @@
-﻿# Disease Prediction using Machine Learning
+﻿# Disease Prediction and Medicine Recommendation using Machine Learning
 
-This project aims to predict diseases based on symptoms using machine learning models. The project utilizes multiple classifiers and combines their predictions to improve accuracy.
+This project aims to predict diseases based on symptoms using machine learning models and recommend medicines based on the predicted disease. The project utilizes multiple classifiers and combines their predictions to improve accuracy.
 
 ## Table of Contents
 
@@ -39,19 +39,23 @@ pip install -r requirements.txt
 
 ### Data Preprocessing:
 
-Load and clean the dataset using `\load_and_clean_data\` function from `\src/data_preprocessing.py\`.
+Load and clean the dataset using the `load_and_clean_data` function from `src/data_preprocessing.py`.
 
 ### Model Training:
 
-Train the models using `\train_models\` function from `\src/model_training.py\`.
+Train the models using the `train_models` function from `src/model_training.py`.
 
 ### Model Evaluation:
 
-Evaluate the models using `\evaluate_model\` function from `\src/model_evaluation.py\`.
+Evaluate the models using the `evaluate_model` function from `src/model_evaluation.py`.
 
 ### Disease Prediction:
 
-Predict diseases based on symptoms using `\predict_disease\` function from `\src/disease_prediction.py\`.
+Predict diseases based on symptoms using the `predict_disease` function from `src/disease_prediction.py`.
+
+### Medicine Recommendation:
+
+Recommend medicines based on the predicted disease using the `get_medicines` function from `views.py`.
 
 ### Run the Main Script:
 
@@ -72,6 +76,8 @@ Disease_prediction/
 │   ├── svm_model.pkl
 │   ├── nb_model.pkl
 │   ├── rf_model.pkl
+│   ├── encoder.pkl
+│   ├── symptom_index.pkl
 ├── notebooks/
 │   ├── Disease_prediction.ipynb
 ├── src/
@@ -81,6 +87,32 @@ Disease_prediction/
 │   ├── model_inference.py
 │   ├── disease_prediction.py
 │   ├── utils.py
+├── api/
+│   ├── disease_prediction/
+│   │   ├── templates/
+│   │   │   ├── disease_prediction/
+│   │   │   │   ├── index.html
+│   │   ├── static/
+│   │   │   ├── css/
+│   │   │   │   ├── styles.css
+│   │   │   ├── js/
+│   │   │   │   ├── script.js
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   ├── data/
+│   │   │   ├── medicines_data.json
+│   ├── healthcare/
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   ├── wsgi.py
+│   │   ├── asgi.py
+│   ├── manage.py
+├── medication_recommender/
+│   ├── datasets/
+│   │   ├── data/
+│   │   │   ├── medicines_data.json
+│   │   ├── scrape_data/
+│   │   │   ├── get_data.py
 ├── .gitignore
 ├── README.md
 ├── requirements.txt
@@ -103,6 +135,6 @@ The models are evaluated using accuracy and confusion matrix. The evaluation res
 
 Contributions are welcome! Please fork the repository and submit a pull request.
 
-## License"
+## License
 
-This project is licensed under the MIT License. See the `\LICENSE\` file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.

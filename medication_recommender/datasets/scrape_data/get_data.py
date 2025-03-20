@@ -79,7 +79,7 @@ def scrape_medicines(disease_name: str):
 
     return results
 
-disease = "Common Cold" #NO AIDS DATA
+disease = "hemmorhoids(piles)" #NO AIDS DATA
 medicines = scrape_medicines(disease)
 
 # Remove duplicates based on Medicine Name
