@@ -197,7 +197,6 @@ function getMedicines() {
                         <h4>${med["Medicine Name"]}</h4>
                         <p>Rating: ${med.Rating}</p>
                         <p class="description">${med.Description.slice(0, 100)}... 
-                            <button class="more" onclick="showMore('${med.Description}')">More</button>
                         </p>
                         <a href="${med.URL}" target="_blank">More Info</a>
                     </div>

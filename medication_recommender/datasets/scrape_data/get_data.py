@@ -38,7 +38,7 @@ def scrape_medicines(disease_name: str):
             rating = 0.0  # If no rating is found, assume 0
 
         # ✅ Only process medicines with rating >= 4.5
-        if rating >= 4.5:
+        if rating >= 4:
             try:
                 link_element = product.find_element(By.CLASS_NAME, "style__product-link___1hWpa")
                 medicine_url = link_element.get_attribute("href")
@@ -79,7 +79,7 @@ def scrape_medicines(disease_name: str):
 
     return results
 
-disease = "hemmorhoids(piles)" #NO AIDS DATA
+disease = "hepatitis B" #NO AIDS DATA
 medicines = scrape_medicines(disease)
 
 # Remove duplicates based on Medicine Name
