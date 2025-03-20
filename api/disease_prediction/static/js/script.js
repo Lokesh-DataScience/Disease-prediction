@@ -3,71 +3,79 @@ const API_BASE_URL =
         ? "http://127.0.0.1:8000/api/predict/"
         : "https://disease-detection-sipf.onrender.com/api/predict/";
 
-const suggestions = [
-    "Itching", "Skin rash", "Nodal skin eruptions", "Continuous sneezing", "Shivering", "Chills", "Joint pain",
-    "Stomach pain", "Acidity", "Ulcers on tongue", "Muscle wasting", "Vomiting", "Burning micturition",
-    "Spotting urination", "Fatigue", "Weight gain", "Anxiety", "Cold hands and feets", "Mood swings", "Weight loss",
-    "Restlessness", "Lethargy", "Patches in throat", "Irregular sugar level", "Cough", "High fever", "Sunken eyes",
-    "Breathlessness", "Sweating", "Dehydration", "Indigestion", "Headache", "Yellowish skin", "Dark urine", "Nausea",
-    "Loss of appetite", "Pain behind the eyes", "Back pain", "Constipation", "Abdominal pain", "Diarrhoea", "Mild fever",
-    "Yellow urine", "Yellowing of eyes", "Acute liver failure", "Fluid overload", "Swelling of stomach", "Swelled lymph nodes",
-    "Malaise", "Blurred and distorted vision", "Phlegm", "Throat irritation", "Redness of eyes", "Sinus pressure", "Runny nose",
-    "Congestion", "Chest pain", "Weakness in limbs", "Fast heart rate", "Pain during bowel movements", "Pain in anal region",
-    "Bloody stool", "Irritation in anus", "Neck pain", "Dizziness", "Cramps", "Bruising", "Obesity", "Swollen legs",
-    "Swollen blood vessels", "Puffy face and eyes", "Enlarged thyroid", "Brittle nails", "Swollen extremeties", "Excessive hunger",
-    "Extra marital contacts", "Drying and tingling lips", "Slurred speech", "Knee pain", "Hip joint pain", "Muscle weakness",
-    "Stiff neck", "Swelling joints", "Movement stiffness", "Spinning movements", "Loss of balance", "Unsteadiness",
-    "Weakness of one body side", "Loss of smell", "Bladder discomfort", "Foul smell of urine", "Continuous feel of urine",
-    "Passage of gases", "Internal itching", "Toxic look (typhos)", "Depression", "Irritability", "Muscle pain", "Altered sensorium",
-    "Red spots over body", "Belly pain", "Abnormal menstruation", "Dischromic patches", "Watering from eyes", "Increased appetite",
-    "Polyuria", "Family history", "Mucoid sputum", "Rusty sputum", "Lack of concentration", "Visual disturbances",
-    "Receiving blood transfusion", "Receiving unsterile injections", "Coma", "Stomach bleeding", "Distention of abdomen",
-    "History of alcohol consumption", "Fluid overload.1", "Blood in sputum", "Prominent veins on calf", "Palpitations",
-    "Painful walking", "Pus filled pimples", "Blackheads", "Scurring", "Skin peeling", "Silver like dusting", "Small dents in nails",
-    "Inflammatory nails", "Blister", "Red sore around nose", "Yellow crust ooze"
+const MEDICINE_API_URL = 
+    window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+        ? "http://127.0.0.1:8000/api/medicines/"
+        : "https://disease-detection-sipf.onrender.com/api/medicines/";
+
+// ✅ Disease-symptom mapping from your file
+const diseaseSymptoms = [
+    ["Itching", "Nodal skin eruptions", "Skin rash"],
+    ["Chills", "Continuous sneezing", "Shivering"],
+    ["Acidity", "Cough", "Stomach pain", "Ulcers on tongue", "Vomiting"],
+    ["Abdominal pain", "Itching", "Loss of appetite", "Nausea", "Vomiting", "Yellowish skin"],
+    ["Burning micturition", "Itching", "Skin rash", "Stomach pain"],
+    ["Abdominal pain", "Indigestion", "Loss of appetite", "Passage of gases", "Vomiting"],
+    ["High fever", "Muscle wasting", "Patches in throat"],
+    ["Blurred and distorted vision", "Excessive hunger", "Fatigue", "Increased appetite", "Irregular sugar level", "Lethargy", "Obesity", "Restlessness", "Weight loss"],
+    ["Dehydration", "Sunken eyes", "Vomiting"],
+    ["Breathlessness", "Cough", "Family history", "Fatigue", "High fever"],
+    ["Chest pain", "Dizziness", "Headache", "Loss of balance"],
+    ["Acidity", "Blurred and distorted vision", "Depression", "Excessive hunger", "Headache", "Indigestion", "Irritability", "Stiff neck"],
+    ["Back pain", "Dizziness", "Neck pain", "Weakness in limbs"],
+    ["Headache", "Vomiting", "Weakness of one body side"],
+    ["Dark urine", "Fatigue", "High fever", "Itching", "Vomiting", "Weight loss", "Yellowish skin"],
+    ["Chills", "Diarrhoea", "Headache", "High fever", "Nausea", "Sweating", "Vomiting"],
+    ["Fatigue", "Headache", "High fever", "Itching", "Lethargy", "Loss of appetite", "Malaise", "Mild fever", "Skin rash", "Swelled lymph nodes"],
+    ["Back pain", "Chills", "Fatigue", "Headache", "High fever", "Joint pain", "Loss of appetite", "Malaise", "Muscle pain", "Nausea", "Pain behind the eyes", "Skin rash", "Vomiting"],
+    ["Abdominal pain", "Chills", "Constipation", "Diarrhoea", "Fatigue", "Headache", "High fever", "Nausea", "Toxic look (typhos)", "Vomiting"],
+    ["Blackheads", "Pus filled pimples", "Skin rash"],
+    ["Bladder discomfort", "Burning micturition", "Foul smell of urine"],
+    ["Joint pain", "Silver like dusting", "Skin peeling", "Skin rash", "Small dents in nails"],
+    ["Blister", "High fever", "Red sore around nose", "Skin rash"]
 ];
 
+
+// ✅ Show suggestions dynamically by matching symptom sets
+// ✅ Show suggestions dynamically by matching symptom sets
 function showSuggestions(value) {
     const suggestionsBox = document.getElementById("suggestions");
     suggestionsBox.innerHTML = "";
 
-    if (value) {
-        // Split by commas and trim spaces
-        const symptoms = value.split(',').map(s => s.trim());
-        const lastSymptom = symptoms[symptoms.length - 1];  // Show suggestions only for the last symptom
+    if (!value) return;
 
-        if (lastSymptom) {
-            const filteredSuggestions = suggestions.filter(suggestion =>
-                suggestion.toLowerCase().includes(lastSymptom.toLowerCase())
-            );
+    const query = value.trim().toLowerCase();
+    const matchingSets = new Set();
 
-            filteredSuggestions.forEach(suggestion => {
-                const suggestionDiv = document.createElement("div");
-                suggestionDiv.textContent = suggestion;
-                suggestionDiv.onclick = () => selectSuggestion(suggestion);
-                suggestionsBox.appendChild(suggestionDiv);
-            });
+    // Iterate over the array of symptom sets
+    diseaseSymptoms.forEach(set => {
+        if (set.some(symptom => symptom.toLowerCase().includes(query))) {
+            matchingSets.add(set.join(', '));  // Store as a single string to prevent duplicates
         }
-    }
+    });
+
+    // Display unique matching sets
+    matchingSets.forEach(set => {
+        const suggestionDiv = document.createElement("div");
+        suggestionDiv.textContent = set;
+        suggestionDiv.onclick = () => selectSuggestion(set);
+        suggestionsBox.appendChild(suggestionDiv);
+    });
 }
 
-function selectSuggestion(suggestion) {
-    const symptomsInput = document.getElementById("symptoms");
-    let symptoms = symptomsInput.value.trim();
 
-    if (symptoms) {
-        let symptomList = symptoms.split(',').map(s => s.trim());
-        symptomList[symptomList.length - 1] = suggestion;  // Replace only the last symptom with the selected suggestion
-        symptomsInput.value = symptomList.join(', ');
-    } else {
-        symptomsInput.value = suggestion;
-    }
+// ✅ Select the suggested symptom set
+function selectSuggestion(symptoms) {
+    const symptomsInput = document.getElementById("symptoms");
+    symptomsInput.value = symptoms;
 
     document.getElementById("suggestions").innerHTML = "";
 }
 
+// ✅ Predict disease with confidence validation
 function predictDisease() {
     let symptoms = document.getElementById("symptoms").value.trim();
+    
     if (symptoms === "") {
         alert("Please enter symptoms!");
         return;
@@ -90,9 +98,15 @@ function predictDisease() {
     .then(data => {
         let resultBox = document.getElementById("result");
         resultBox.style.display = "block";
-        resultBox.innerHTML = `
-            <p><strong>You have got:</strong> <span style="color:#ff5757; font-weight:bold;">${data.final_prediction}</span></p>
-        `;
+
+        if (data.message) {
+            resultBox.innerHTML = `
+                <p><strong>Prediction:</strong> ${data.message}</p>
+            `;
+        } else {
+            resultBox.innerHTML = `
+                <p><strong>You have got:</strong> <span style="color:#ff5757; font-weight:bold;">${data.final_prediction}</span></p>            `;
+        }
     })
     .catch(error => console.error("Error:", error));
 }
