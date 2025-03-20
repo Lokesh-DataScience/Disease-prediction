@@ -37,7 +37,8 @@ const diseaseSymptoms = [
 
 
 // ✅ Show suggestions dynamically by matching symptom sets
-// ✅ Show suggestions dynamically by matching symptom sets
+
+
 function showSuggestions(value) {
     const suggestionsBox = document.getElementById("suggestions");
     suggestionsBox.innerHTML = "";
@@ -63,27 +64,43 @@ function showSuggestions(value) {
     });
 }
 
+let selectedSymptoms = new Set();
 
 // ✅ Select the suggested symptom set
 function selectSuggestion(symptoms) {
     const symptomsInput = document.getElementById("symptoms");
+
+    // Add selected symptoms to the input field
     symptomsInput.value = symptoms;
+
+    // Track the selected set
+    selectedSymptoms.clear();
+    symptoms.split(',').map(s => s.trim()).forEach(symptom => {
+        selectedSymptoms.add(symptom.toLowerCase());
+    });
 
     document.getElementById("suggestions").innerHTML = "";
 }
 
+
 // ✅ Predict disease with confidence validation
 function predictDisease() {
     let symptoms = document.getElementById("symptoms").value.trim();
-    
+
     if (symptoms === "") {
         alert("Please enter symptoms!");
         return;
     }
 
-    let symptomList = symptoms.split(',').map(s => s.trim());
-    if (symptomList.length < 3) {
-        alert("Please enter at least 3 symptoms!");
+    let symptomList = symptoms.split(',').map(s => s.trim().toLowerCase());
+
+    // Validation: Check if symptoms match any predefined set
+    let isValid = diseaseSymptoms.some(set => 
+        symptomList.every(symptom => set.map(s => s.toLowerCase()).includes(symptom))
+    );
+
+    if (!isValid) {
+        alert("Please choose symptoms from the suggestion box!!");
         return;
     }
 
@@ -105,11 +122,13 @@ function predictDisease() {
             `;
         } else {
             resultBox.innerHTML = `
-                <p><strong>You have got:</strong> <span style="color:#ff5757; font-weight:bold;">${data.final_prediction}</span></p>            `;
+                <p><strong>You have got:</strong> 
+                <span style="color:#ff5757; font-weight:bold;">${data.final_prediction}</span></p>`;
         }
     })
     .catch(error => console.error("Error:", error));
 }
+
 
 function getMedicines() {
     let disease = document.getElementById("result").querySelector("p span").innerText;
