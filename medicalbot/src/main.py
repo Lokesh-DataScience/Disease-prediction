@@ -1,7 +1,7 @@
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 import dotenv
-dotenv.load_dotenv()
+dotenv.load_dotenv('../.env')
 
 llm = ChatGroq(
     model="llama-3.1-8b-instant",
